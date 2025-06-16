@@ -1,0 +1,135 @@
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #d0f0c0, #b3e0ff);
+  color: #1a2e35;
+}
+
+.navbar {
+  background-color: #2ec4b6;
+  color: white;
+  padding: 1.2rem;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  box-shadow: 0 2px 6px #0b877d;
+}
+
+.footer {
+  background-color: #2ec4b6;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+  box-shadow: 0 -2px 4px #0b877d;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  flex: 1;
+}
+
+.sidebar {
+  background-color: #eafaf1;
+  border-left: 5px solid #2ec4b6;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 0 10px 10px 0;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  margin: 0.5rem 0;
+  font-weight: 500;
+}
+
+.task-list {
+  list-style: none;
+  padding: 0;
+}
+
+.task-item {
+  background-color: #ffffffcc;
+  border-left: 5px solid #ff9f1c;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.task-item .emoji {
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+}
+
+.buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button.done {
+  background-color: #06d6a0;
+  color: white;
+}
+
+button.pending {
+  background-color: #ff9f1c;
+  color: white;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .content {
+    flex-direction: row;
+    gap: 1rem;
+  }
+
+  .sidebar {
+    width: 30%;
+    margin-bottom: 0;
+  }
+
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  min-height: 70vh;
+}
+}
+.day-menu {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 2rem; 
+  flex-wrap: wrap;
+}
+.task-wrapper {
+  width: 80%;          
+  max-width: 800px;   
+  margin: 0 auto;
+}
