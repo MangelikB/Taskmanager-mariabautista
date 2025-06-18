@@ -55,9 +55,35 @@ body {
   font-weight: 500;
 }
 
+.day-menu {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 3rem; 
+  flex-wrap: wrap;
+}
+
+.day-button {
+  background-color: #ecfffb;
+  border: none;
+  border-radius: 10px;
+  padding: 0.8rem 1.2rem;
+  font-weight: bold;
+  color: #1a2e35;
+  cursor: pointer;
+  box-shadow: 0 2px 4px #ffffff;
+  transition: background-color 0.3s ease;
+}
+
+.day-button:hover {
+  background-color: #ffffff;
+}
+
 .task-list {
   list-style: none;
   padding: 0;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .task-item {
@@ -100,7 +126,6 @@ button.pending {
   color: white;
 }
 
-/* Responsive */
 @media (min-width: 768px) {
   .content {
     flex-direction: row;
@@ -112,24 +137,43 @@ button.pending {
     margin-bottom: 0;
   }
 
-main {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
-  min-height: 70vh;
+  main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    min-height: 70vh;
+  }
 }
-}
-.day-menu {
-  margin-top: 1rem;
-  display: flex;
-  justify-content: center;
-  gap: 2rem; 
-  flex-wrap: wrap;
-}
+
 .task-wrapper {
-  width: 80%;          
-  max-width: 800px;   
+  width: 80%;
+  max-width: 800px;
   margin: 0 auto;
+}
+
+@media (max-width: 480px) {
+  .day-menu {
+    gap: 1.5rem;
+  }
+  
+  .day-button {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .task-item {
+    padding: 0.8rem;
+    font-size: 0.95rem;
+  }
+
+  .sidebar {
+    padding: 0.8rem;
+  }
+
+  .navbar {
+    font-size: 1.6rem;
+    padding: 1rem;
+  }
 }
