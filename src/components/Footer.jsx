@@ -5,4 +5,4 @@ const Footer = ({ children }) => (
 );
 
 export default Footer;
-// PUNTO 2
+//Punto 2
