@@ -4,8 +4,8 @@ import { TasksContext } from "../Context/TasksContext";
 
 const ListPage = ({ filters }) => {
   const { lists, addTask, deleteTask, toggleTaskDone, deleteList, PRIORITY_ORDER } = useContext(TasksContext);
-  const { id } = useParams();
-  const navigate = useNavigate(); //PUNTO 6, 9
+  const { id } = useParams(); //PUNTO 9
+  const navigate = useNavigate(); //PUNTO 6, 
 
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [newTaskPriority, setNewTaskPriority] = useState("medium");
@@ -45,7 +45,7 @@ const ListPage = ({ filters }) => {
     tasksToShow = tasksToShow.filter((t) => !t.done);
   }
 
-  tasksToShow.sort((a, b) => PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority]); //PUNTO 12
+  tasksToShow.sort((a, b) => PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority]); //PUNTO 13
 
   return (
     <div className="listpage-container">
@@ -92,7 +92,7 @@ const ListPage = ({ filters }) => {
           <li
             key={task.id}
             className={`task-item ${task.done ? "task-done" : ""}`}
-          >
+          > 
             <div className="task-content">
               <input
                 type="checkbox"

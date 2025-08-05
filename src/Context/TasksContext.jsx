@@ -17,32 +17,50 @@ const PRIORITY_ORDER = { high: 1, medium: 2, low: 3 };
 
 export const TasksProvider = ({ children }) => {
   const [lists, setLists] = useState([]);
+  const [taskUnsubscribers, setTaskUnsubscribers] = useState([]);
 
-  // 🔄 Escucha las listas y sus tareas (subcolección)
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "lists"), async (snapshot) => {
-      const listPromises = snapshot.docs.map(async (docSnap) => {
-        const listId = docSnap.id;
-        const tasksSnapshot = await getDocs(collection(db, "lists", listId, "tasks"));
-        const tasks = tasksSnapshot.docs.map((taskDoc) => ({
-          id: taskDoc.id,
-          ...taskDoc.data(),
-        }));
-        return {
-          id: listId,
-          ...docSnap.data(),
-          tasks,
-        };
+    // Escuchar cambios en la colección de listas
+    const unsubscribeLists = onSnapshot(collection(db, "lists"), (snapshot) => {
+      const newLists = snapshot.docs.map((docSnap) => ({
+        id: docSnap.id,
+        ...docSnap.data(),
+        tasks: [], // Inicialmente vacío
+      }));
+
+      // Cancelar listeners anteriores de tareas
+      taskUnsubscribers.forEach((unsub) => unsub());
+
+      // Crear nuevos listeners para cada subcolección de tareas
+      const newUnsubscribers = newLists.map((list, index) => {
+        const tasksRef = collection(db, "lists", list.id, "tasks");
+
+        const unsubscribeTasks = onSnapshot(tasksRef, (taskSnapshot) => {
+          const tasks = taskSnapshot.docs.map((taskDoc) => ({
+            id: taskDoc.id,
+            ...taskDoc.data(),
+          }));
+
+          setLists((prevLists) => {
+            const updatedLists = [...prevLists];
+            updatedLists[index] = { ...updatedLists[index], tasks };
+            return updatedLists;
+          });
+        });
+
+        return unsubscribeTasks;
       });
 
-      const resolvedLists = await Promise.all(listPromises);
-      setLists(resolvedLists);
+      setLists(newLists);
+      setTaskUnsubscribers(newUnsubscribers);
     });
 
-    return () => unsubscribe();
+    return () => {
+      unsubscribeLists();
+      taskUnsubscribers.forEach((unsub) => unsub());
+    };
   }, []);
 
-  // 🆕 Crea una nueva lista
   const addList = async (name) => {
     if (!name.trim()) return;
     await addDoc(collection(db, "lists"), {
@@ -50,9 +68,7 @@ export const TasksProvider = ({ children }) => {
     });
   };
 
-  // ❌ Elimina una lista y sus tareas
   const deleteList = async (listId) => {
-    // ⚠️ Firestore no elimina subcolecciones automáticamente
     const tasksRef = collection(db, "lists", listId, "tasks");
     const tasksSnap = await getDocs(tasksRef);
     const deletePromises = tasksSnap.docs.map((docSnap) => deleteDoc(docSnap.ref));
@@ -61,7 +77,6 @@ export const TasksProvider = ({ children }) => {
     await deleteDoc(doc(db, "lists", listId));
   };
 
-  // ➕ Agrega una tarea a la subcolección
   const addTask = async (listId, task) => {
     const taskData = {
       title: task.title,
@@ -72,13 +87,11 @@ export const TasksProvider = ({ children }) => {
     await addDoc(collection(db, "lists", listId, "tasks"), taskData);
   };
 
-  // ❌ Elimina una tarea de la subcolección
   const deleteTask = async (listId, taskId) => {
     const taskRef = doc(db, "lists", listId, "tasks", taskId);
     await deleteDoc(taskRef);
   };
 
-  // ✅ Cambia el estado de completado
   const toggleTaskDone = async (listId, taskId) => {
     const taskRef = doc(db, "lists", listId, "tasks", taskId);
     const taskSnap = await getDocs(collection(db, "lists", listId, "tasks"));
